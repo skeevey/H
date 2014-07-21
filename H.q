@@ -26,11 +26,10 @@
 .H.is_remote_exec:{$[.H.is_select[x] or .H.is_update[x];.H.is_configured_remote[x];0b]};
 
 ///
-//handle symbol-type return values
-.H.E:{$[11h=abs type r:.H.remote_evaluate{$[(0h~type x)and not .H.is_remote_exec x;.z.s'[x];.H.is_remote_exec x;.z.s x;x]}'[x];enlist r;r]};
-
-///
 //step through parse tree, evaluating remote queries where necessary then evaluate what remains
+.H.E:{
+    r:.H.remote_evaluate{$[(0h~type x)and not .H.is_remote_exec x;.z.s'[x];.H.is_remote_exec x;.H.E x;x]}'[x];
+    $[11h=abs type r;enlist r;r]};
 .H.evaluate:{eval{$[.H.is_remote_exec x;.H.E x;1=count x;x;.z.s'[x]]}parse x}
 
 ///
