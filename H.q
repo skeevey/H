@@ -27,10 +27,11 @@
 
 ///
 //step through parse tree, evaluating remote queries where necessary then evaluate what remains
-.H.E:{
-    r:.H.remote_evaluate{$[(0h~type x)and not .H.is_remote_exec x;.z.s'[x];.H.is_remote_exec x;.H.E x;x]}'[x];
+.H.E_remote:{
+    r:.H.remote_evaluate{$[(0h~type x)and not .H.is_remote_exec x;.z.s'[x];.H.is_remote_exec x;.H.E_remote x;x]}'[x];
     $[11h=abs type r;enlist r;r]};
-.H.evaluate:{eval{$[.H.is_remote_exec x;.H.E x;1=count x;x;.z.s'[x]]}parse x}
+.H.E:{$[.H.is_remote_exec x;.H.E_remote x;1=count x;x;.z.s'[x]]};
+.H.evaluate:{eval .H.E parse x};
 
 ///
 //Evaluate string
